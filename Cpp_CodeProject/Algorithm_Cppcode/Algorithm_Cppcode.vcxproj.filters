@@ -15,10 +15,61 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="神秘字符.cpp">
+    <ClCompile Include="15 神秘字符.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="互换位置.cpp">
+    <ClCompile Include="1 A+B问题1.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="2 A+B问题2.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="3 A+B问题3.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="4 A+B问题4.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="5 A+B问题5.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="6 A+B问题6.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="7 平均绩点.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="8 摆平积木.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="9 奇怪的信.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="10 运营商活动.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="11 共同祖先.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="12 打印数字图形.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="13 镂空三角形.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="14 句子缩写.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="16 互换位置.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="17 出栈合法性.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="18 链表的基本操作.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="19 单链表反转.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
