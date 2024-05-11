@@ -335,10 +335,24 @@ int main()
 #### 定义单链表
 
 ```cpp
+/*写法一(推荐)*/
+typedef struct LNode{		//定义单链表结点类型
+    ElemType data;			//每个结点存放下一个数据元素
+    LNode *next;		    //指针指向下一个结点
+}LNode, *LinkList;
+
+/*写法二*/
 struct LNode{			 //定义单链表结点类型
     ElemType data;		 //每个结点存放下一个数据元素
-    struct LNode *next;	 //指针指向下一个结点
+    LNode *next;	     //指针指向下一个结点
 }
+typedef LNode *LinkList;
+
+/*要表示一个单链表时，只需声明一个头指针L,指向单链表的第一个结点
+LNode *L;		//声明一个指向单链表第一个结点的指针(强调结点) 或
+LinkList L;		//声明一个指向单链表第一个结点的指针(可读性更强，强调单链表)
+*/
+
 //增加一个新的结点：在内存中申请一个结点所需空间，并用指针p指向这个结点
 struct LNode *p = (struct LNode*) malloc(sizeof(struct LNode));
 
@@ -347,22 +361,15 @@ typedef struct LNode LNode;     //将struct LNode 重命名为 LNode
 LNode *p = (LNode*) malloc(sizeof(LNode)); //增加一个该类型的新结点
 ```
 
-```cpp
-/*写法一(推荐)*/
-typedef struct LNode{		//定义单链表结点类型
-    ElemType data;			//每个结点存放下一个数据元素
-    struct LNode *next;		 //指针指向下一个结点
-}LNode, *LinkList;
+#### 链表的初始化
 
-/*写法二*/
-struct LNode{			 //定义单链表结点类型
-    ElemType data;		 //每个结点存放下一个数据元素
-    struct LNode *next;	 //指针指向下一个结点
+```cpp
+bool InitList(LinkList &L)    
+{
+    L = new LNode;			//在堆区创建一个头结点，数据类型为LNode
+    L->next = nullptr;       //空表、暂时没有任何结点，头结点指针指向空	
+	return true;
 }
-/*要表示一个单链表时，只需声明一个头指针L,指向单链表的第一个结点
-LNode *L;		//声明一个指向单链表第一个结点的指针(强调结点) 或
-LinkList L;		//声明一个指向单链表第一个结点的指针(可读性更强，强调单链表)
-*/
 ```
 
 #### 不带头结点的单链
@@ -407,4 +414,184 @@ bool InitList(LinkList &L)
 }
 
 ```
+
+#### 头插法创建单向链表
+
+```cpp
+void CreatListHead(LinkList &L, const size_t n)
+{
+    for(int i = 0; i < n; ++i)
+    {
+        LNode *p = new LNode;
+        cin >> p->data;
+        p->next = L->next;
+        L->next = p;
+    }
+}
+```
+
+#### 尾插法创建单向链表
+
+```c++
+void CreatListTail(LinkList &L, const size_t n)
+{
+    LNode *r = L;
+    for(int i = 0; i < n; ++i)
+    {
+        LNode *p = new Lnode;
+        cin >> p->data;
+        p->next = r->next;
+        r->next = p;
+        r = r->next;
+    }
+}
+```
+
+#### 判断链表是否为空
+
+```cpp
+bool IsEmpty(const LinkList &L)
+{
+    return (L==NULL);
+}
+```
+
+#### 销毁链表
+
+```cpp
+bool DestoryList(LinkList &L)
+{
+    if(IsEmpty(L))
+    {
+        cerr << "empty List！" << endl;
+        return false;
+    }
+    while(L)                         //链表还未到达尾端
+    {
+        auto temp = L->next;		//头指针指向下一个结点
+        delete L;                    //从头结点开始逐个释放结点空间
+        L = temp;				   //更新头借点
+    }
+    return true;
+}
+```
+
+#### 计算链表长度
+
+```cpp
+size_t GetLength(const LinkList &L)
+{
+    LNode *p;
+    p = L->next;
+    size_t count = 0;
+    while(p)
+    {
+        ++count;
+        p = p->next;
+    }
+    return count;
+}
+//时间复杂度O(n)
+```
+
+#### 取链表中第 i 个元素的值
+
+```cpp
+bool GetElem(const LinkList &L, const int &i, ElemType &e)
+{
+    if(i < 0)
+    {
+        cerr << "out of range" << endl;
+        return false;
+    }
+    LNode *p = L->next;            //创建一个链表指针，指向 L 的下一个结点
+    for(int j = 1; j < i+1; ++j)
+    {
+        if(!p)                
+        {
+            cerr << "out of range" << endl;
+            return false;		//若p指向结点为空，表示已遍历到链表尾部，停止遍历
+        }			
+    }
+    e = p->next;		    //更新指针p，指向下一个结点
+    return true;
+}
+```
+
+#### 按值查找元素(返回第几个位置)
+
+```cpp
+size_t LocateElem(LinkList &L, ElemType &e)
+{
+    LNode *p = L->next;
+    size_t count = 1;
+    while(p)
+    {
+        if(p-data == e)   return count;
+        ++count;
+        p = p->next;
+    }
+    cerr << "not found" << endl; 
+    return 0;
+}
+```
+
+#### 在链表中插入元素
+
+```cpp
+/*在单链表 L 的第 i 个位置插入元素 e*/
+bool InsertList(LinkList &L, const int &i, const Elem ElemType &e)
+{
+    LNode *p = L;
+    int j = 0;            
+    while(p && j < i-1)    //判断插入位置合理性, 检查单链表前i个位置是否有效
+    {
+        p = p->next;	  //将p指向链表的第一个结点
+        ++j;		
+    }
+    if(!p || i < 0)        //异常情况报错
+    {
+        cerr << "out of range" << endl;
+        return false;
+    }
+    LinkList insert = new Lnode;   //创建一个链表结点
+    insert->data = e; 			  //将待插入元素放入结点数据域
+    insert->next = p->next;		  //将插入元素next指针指向第i+1个元素
+    p->next = insert;		      //将插入元素前一个结点指向该插入元素，形成链表
+    return true;
+}
+//时间复杂度为O(n)
+```
+
+#### 删除链表的某个结点
+
+``` cpp
+bool EraseList(LinkList &L, const int &i)
+{
+    LNode *p = L;      			//创建单链表
+    int j = 0;
+    while(p->next && j < i-1)   ////判断插入位置合理性, 检查单链表前i个位置是否有效
+    {
+        p = p->next;		   //将p指向链表的第一个结点，从此处开始遍历
+        ++j;
+    }
+    if(!(p->next) || i < 0)
+    {
+        cerr << "out of range" <<endl;
+        return false;
+    }
+    LNode *q = p->next;
+    p->next = p->next->next;
+    delete q;
+    return true; 
+}
+```
+
+
+
+
+
+
+
+
 
