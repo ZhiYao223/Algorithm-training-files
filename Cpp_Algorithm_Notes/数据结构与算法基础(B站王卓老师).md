@@ -37,7 +37,7 @@ typedef struct{
 
 #### 顺序表的初始化
 
-```
+```cpp
 bool InitList(SqList &L)
 {
     L.elem = new ElemType[MAXSIZE]; //在堆区开辟内存
@@ -361,7 +361,19 @@ typedef struct LNode LNode;     //将struct LNode 重命名为 LNode
 LNode *p = (LNode*) malloc(sizeof(LNode)); //增加一个该类型的新结点
 ```
 
-#### 链表的初始化
+其中LNode *p；与 LNode *p = new LNode; 有何区别？
+
+==**`LNode *p;`**== 
+
+- 这条语句仅仅声明了一个指向 `LNode` 类型对象的指针变量 `p`，但是并没有为这个指针分配任何内存来存储实际的 `LNode` 对象。此时，`p` 是一个未初始化的指针，其值是未定义的，尝试解引用这样的指针（即使用 `*p` 访问其内容）会导致未定义行为，通常是程序崩溃。通常情况下，这样的声明后，你需要在适当的时候为 `p` 分配内存，比如使用 `malloc`（C语言）或 `new` （C++）。
+
+==**`LNode *p = new LNode;`**==
+
+- 这条语句不仅声明了一个指向 `LNode` 类型对象的指针变量 `p`，而且还使用 `new` 操作符在堆上为一个 `LNode` 类型的对象动态分配了内存。`p` 会被初始化为指向新分配内存的地址，也就是说，现在 `p` 指向一个实际存在的 `LNode` 对象。这种情况下，你可以安全地通过 `p` 来访问和修改这个新创建的 `LNode` 对象的成员。
+
+​	`LNode *p;` 只是创建了一个指针，没有分配实际存储空间，而 `LNode *p = new LNode;` 不仅创建了指针还为它指向的 `LNode` 类型对象分配了内存。使用 `new` 分配的内存需要手动释放，通常使用 `delete p;`（C++）或 `free(p);`（C语言）来避免内存泄漏。
+
+#### 单链表的初始化
 
 ```cpp
 bool InitList(LinkList &L)    
@@ -418,14 +430,15 @@ bool InitList(LinkList &L)
 #### 头插法创建单向链表
 
 ```cpp
+//L为指向链表头结点的指针，n表示要创建的链表中实际数据节点的数量
 void CreatListHead(LinkList &L, const size_t n)
 {
-    for(int i = 0; i < n; ++i)
+    for(int i = 0; i < n; ++i)     //每次迭代创建一个新的链表节点。
     {
-        LNode *p = new LNode;
-        cin >> p->data;
-        p->next = L->next;
-        L->next = p;
+        LNode *p = new LNode;      //在堆内存上动态分配一个LNode类型、由指针p指向的新结点
+        cin >> p->data;			  //从键盘读取数据并存储到刚所创建的结点数据域钟
+        p->next = L->next;		  //保存当前头节点后面的第一个节点的地址到新节点的next指针
+        L->next = p;              //将新节点p设置为头节点L的下一个节点
     }
 }
 ```
@@ -433,16 +446,17 @@ void CreatListHead(LinkList &L, const size_t n)
 #### 尾插法创建单向链表
 
 ```c++
-void CreatListTail(LinkList &L, const size_t n)
+//L为指向链表头结点的指针，n表示要创建的链表中实际数据节点的数量
+void CreatListTail(LinkList &L, const size_t n) 
 {
-    LNode *r = L;
+    LNode *r = L;				//定义一个指针r，初始时指向链表的头结点，用于追踪当前链表的尾部。
     for(int i = 0; i < n; ++i)
     {
-        LNode *p = new Lnode;
-        cin >> p->data;
-        p->next = r->next;
-        r->next = p;
-        r = r->next;
+        LNode *p = new Lnode;	 //在堆内存上动态分配一个LNode类型、由指针p指向的新结点
+        cin >> p->data;			//从标准输入读取数据并存储到新节点的数据域中
+        p->next = r->next;		//将新节点添加为新的尾节点
+        r->next = p;		    //将新节点p连接到当前尾节点之后，使其成为新的尾节点。
+        r = r->next;		    //更新尾节点指针r，使其指向新添加的节点
     }
 }
 ```
@@ -470,7 +484,7 @@ bool DestoryList(LinkList &L)
     {
         auto temp = L->next;		//头指针指向下一个结点
         delete L;                    //从头结点开始逐个释放结点空间
-        L = temp;				   //更新头借点
+        L = temp;				   //更新头结点
     }
     return true;
 }
@@ -481,13 +495,12 @@ bool DestoryList(LinkList &L)
 ```cpp
 size_t GetLength(const LinkList &L)
 {
-    LNode *p;
-    p = L->next;
+    LNode *p = L->next;	//声明一个指向LNode类型的指针p，将p初始化为头借点L的下一个结点，用于遍历链表。
     size_t count = 0;
-    while(p)
+    while(p)             //只要p指向一个有效的节点，循环就会继续。当p变为NULL，说明已到达链表尾部，循环结束。
     {
-        ++count;
-        p = p->next;
+        ++count;         //每迭代一次，count的值就增加1，表示已遇到一个节点。
+        p = p->next;     //在计数后，将p更新为其下一个节点，以便继续遍历
     }
     return count;
 }
@@ -523,11 +536,11 @@ bool GetElem(const LinkList &L, const int &i, ElemType &e)
 ```cpp
 size_t LocateElem(LinkList &L, ElemType &e)
 {
-    LNode *p = L->next;
+    LNode *p = L->next;                      //创建一个链表指针，指向L的下一个结点
     size_t count = 1;
     while(p)
     {
-        if(p-data == e)   return count;
+        if(p-data == e)   return count;      //找到元素，返回元素位置
         ++count;
         p = p->next;
     }
