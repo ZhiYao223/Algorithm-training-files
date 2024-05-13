@@ -108,12 +108,12 @@ int LocateList(const SqList &L, const ElemType &e)
             return i+1;	//查找成功，返回其查找元素的第一个下标值
         }
     }
-    return 0;	//未能找到对应元素，返回0
-    //算法时间复杂度：O(n)
+    return 0;	//未能找到对应元素，返回0 
 }
+//算法时间复杂度：O(n)
 ```
 
-线性表的插入
+#### 线性表的插入
 
 ```cpp
 bool InsertList(SqList &L, const ElemType &e, const int &i)
@@ -305,11 +305,17 @@ int main()
 
 ![在这里插入图片描述](assets/a2ee08e0bec44673b2e65959ca1ac8d5.png)
 
+------
+
+
+
 ## ==单链表==
 
 ### 单链表的特性
 
 ​	单链表的特点是每个节点只有一个指针，指向下一个节点，而最后一个节点的指针指向空(null)。这意味着可以从链表的头节点开始，逐个访问每个节点，直到到达链表的末尾。
+
+> 头指针 -> 节点1 -> 节点2 -> 节点3 -> … -> 最后一个节点 -> nullptr
 
 - 链表(链式存储)
   - 单链表(两种实现)
@@ -319,7 +325,7 @@ int main()
   - 循环链表
   - 静态链表
 
-单链表是一种常见的[数据结构](https://so.csdn.net/so/search?q=数据结构&spm=1001.2101.3001.7020)，用于存储元素的序列。它由一系列节点组成，每个节点包含一个数据元素和一个指向下一个节点的引用（指针）。单链表中的节点之间通过指针连接起来，形成一个线性结构。单链表是一种简单但灵活的数据结构，常用于实现队列、堆栈和图等其他高级数据结构。
+单链表是一种常见的[数据结构](https://so.csdn.net/so/search?q=数据结构&spm=1001.2101.3001.7020)，用于存储元素的序列。它由一系列节点组成，每个节点包含一个数据元素和一个指向下一个节点的引用（指针）。单链表中的节点之间通过指针连接起来，形成一个线性结构。每个结点只能指向下一个结点，而最后一个结点指向一个空指针nullptr。
 
 |      | 顺序表(顺序存储)                 | 单链表(链式存储)                     |
 | ---- | -------------------------------- | ------------------------------------ |
@@ -384,6 +390,45 @@ bool InitList(LinkList &L)
 }
 ```
 
+### **头结点**
+
+**单链表的带头结点和不带头结点的区别在于是否在链表的开头添加一个额外的头结点。**
+
+- 不带头结点的单链表：
+
+> 不带头结点的单链表直接将第一个节点作为链表的头节点。
+> 特点是第一个节点存储数据，并且没有指向前一个节点的指针。
+> 删除头节点时需要特殊处理，需要更新头指针。
+
+- 带头结点的单链表：
+
+> 带头结点的单链表在链表开头添加一个额外的头结点，头结点的数据域可以不存储实际数据。
+> 头结点的作用是使得链表的第一个节点与其他节点的操作一致，简化链表操作。
+> 头结点的指针域指向链表的第一个节点，方便遍历和插入。
+> 删除头节点时可以直接将头指针指向下一个节点。
+
+> 带头结点的单链表更常用，它使得链表的操作更加简单一致，避免了一些边界情况的特殊处理，更加方便处理链表的插入、删除等操作。同时，带头结点的单链表还可以避免链表为空的特殊情况的处理。
+
+### 带头结点的单链表
+
+```cpp
+/*定义一个单链表*/
+typedef struct LNode{		//定义单链表结点类型
+    ElemType data;			//每个结点存放下一个数据元素
+    struct LNode *next;		 //指针指向下一个结点
+}LNode, *LinkList;
+
+/*初始化一个单链表(带头结点)*/
+bool InitList(LinkList &L)
+{
+    L = (LNode *) malloc(sizeof(LNode));	//分配一个头结点
+    if(L==NULL)		
+        return false;		//内存不足，分配失败
+    L->next = NULL;
+    return true;
+}
+```
+
 #### 不带头结点的单链
 
 ```cpp
@@ -404,27 +449,6 @@ bool Empty(LinkList L)
 {
 	return (L==NULL);
 }
-```
-
-#### 带头结点的单链表
-
-```cpp
-/*定义一个单链表*/
-typedef struct LNode{		//定义单链表结点类型
-    ElemType data;			//每个结点存放下一个数据元素
-    struct LNode *next;		 //指针指向下一个结点
-}LNode, *LinkList;
-
-/*初始化一个单链表(带头结点)*/
-bool InitList(LinkList &L)
-{
-    L = (LNode *) malloc(sizeof(LNode));	//分配一个头结点
-    if(L==NULL)		
-        return false;		//内存不足，分配失败
-    L->next = NULL;
-    return true;
-}
-
 ```
 
 #### 头插法创建单向链表
@@ -495,19 +519,29 @@ bool DestoryList(LinkList &L)
 ```cpp
 size_t GetLength(const LinkList &L)
 {
+<<<<<<< HEAD
     LNode *p = L->next;	//声明一个指向LNode类型的指针p，将p初始化为头借点L的下一个结点，用于遍历链表。
     size_t count = 0;
     while(p)             //只要p指向一个有效的节点，循环就会继续。当p变为NULL，说明已到达链表尾部，循环结束。
     {
         ++count;         //每迭代一次，count的值就增加1，表示已遇到一个节点。
         p = p->next;     //在计数后，将p更新为其下一个节点，以便继续遍历
+=======
+    LNode *p;				//声明一个指向LNode结构体类型的指针变量，用来遍历链表
+    p = L->next;			//将指针p指向链表的第一个实际数据结点(L->next)
+    size_t count = 0;			
+    while(p)                 //判断指向的有效性(指向非空)
+    {
+        ++count;			//计数
+        p = p->next;		//更新，使p指向下一个结点，直到到达链表末尾(p=nullptr)
+>>>>>>> 68772eda10a1ecb05c24bbc59059057922d8e0b4
     }
     return count;
 }
 //时间复杂度O(n)
 ```
 
-#### 取链表中第 i 个元素的值
+#### 获取第 i 个元素的值
 
 ```cpp
 bool GetElem(const LinkList &L, const int &i, ElemType &e)
@@ -531,18 +565,28 @@ bool GetElem(const LinkList &L, const int &i, ElemType &e)
 }
 ```
 
-#### 按值查找元素(返回第几个位置)
+#### 按值查找元素
 
 ```cpp
+/*按值查找元素(返回第几个位置)*/
 size_t LocateElem(LinkList &L, ElemType &e)
 {
+<<<<<<< HEAD
     LNode *p = L->next;                      //创建一个链表指针，指向L的下一个结点
     size_t count = 1;
     while(p)
     {
         if(p-data == e)   return count;      //找到元素，返回元素位置
+=======
+    //声明一个LNode类型的指针变量p，并指向链表的第一个实际数据结点(L->next)。
+    LNode *p = L->next; 	
+    size_t count = 1;          //从第一个位置开始找
+    while(p)			
+    {
+        if(p->data == e)   return count;    
+>>>>>>> 68772eda10a1ecb05c24bbc59059057922d8e0b4
         ++count;
-        p = p->next;
+        p = p->next;	       //更新p结点指向下一个位置
     }
     cerr << "not found" << endl; 
     return 0;
@@ -550,6 +594,8 @@ size_t LocateElem(LinkList &L, ElemType &e)
 ```
 
 #### 在链表中插入元素
+
+[传送门：单链表的插入删除](https://blog.csdn.net/AII_IIA/article/details/134065689)
 
 ```cpp
 /*在单链表 L 的第 i 个位置插入元素 e*/
@@ -576,33 +622,731 @@ bool InsertList(LinkList &L, const int &i, const Elem ElemType &e)
 //时间复杂度为O(n)
 ```
 
+##### 按位序插入(带头结点)
+
+```cpp
+//在第i个位置插入元素e（带头结点）
+typedef struct LNode{
+	ElemType data;
+	struct LNode *next;
+}LNode, *LinkList;
+
+bool ListInsert(LinkList &L, int i, ElemType e){
+	if(i < 1)
+		return false;
+	LNode *p;	//指针p指向当前扫描到的结点
+	int j = 0;	//当前p指向的是第几个结点
+	p = L;		//L指向头结点，头结点是第0个结点(不存数据)
+	while (p != NULL && j < i-1){
+	//循环找到第i-1个结点
+	p = p->next;   //p结点向后移动一位
+	j++;           
+	}
+	if(p==NULL)		//i值不合法
+		return false;
+	LNode *s = (LNode *)malloc(sizeof(LNode));
+	s->data = e;    //将数据元素e存入s数据域中
+	s->next = p->next;  //令s指向p结点的后继结点。即使s结点连上p的后一个结点。
+	p->next = s;      //将结点s连到p之后
+	return true;      //插入成功
+}
+```
+
+##### 按位序插入(不带头结点)
+
+```cpp
+//删除第i个元素(带头结点)
+typedef struct LNode
+{
+	ElemType data;
+	struct LNode *next;
+}LNode, *LinkList;
+
+bool ListDelete(LinkList &L, int i, ElemType &e)
+{
+	if (i < 1)
+		return false;
+	LNode *p;       //指针p指向当前扫描到的结点
+	int j = 0;      //当前p指向的是第几个结点
+	p = L;          //L指向头结点，头结点是第0个结点(不存数据)
+	while(p != NULL && j < i-1)    //循环找到第  i - 1 个结点 
+	{
+		p = p->next;
+		j++;
+	}
+	if (p == NULL)
+		return false;
+	if (p->next == NULL)     //第i-1个结点之后已经无其他结点
+		return false;
+	LNode *q = p->next;      //令q指向被删除结点
+	e = q->data;			//用e返回元素的值
+	p->next = q->next;		//将*q结点从链中“断开”
+	free(q);				//释放结点的存储空间
+	return true;			//删除成功
+}
+```
+
+
+
 #### 删除链表的某个结点
+
+- 注意，此函数没有处理删除头节点的特殊情况，即当`i == 0`时，直接从头开始删除节点的情况需要单独考虑。
 
 ``` cpp
 bool EraseList(LinkList &L, const int &i)
 {
-    LNode *p = L;      			//创建单链表
+    LNode *p = L;      		   //声明一个指向LNode类型的指针，初始化为指针L(链表头结点)
     int j = 0;
-    while(p->next && j < i-1)   ////判断插入位置合理性, 检查单链表前i个位置是否有效
+    //p->next确保p不是尾节点且未越界，j < i-1确保遍历到正确的位置。
+    while(p->next && j < i-1)   //判断插入位置合理性, 检查单链表前i个位置是否有效
     {
-        p = p->next;		   //将p指向链表的第一个结点，从此处开始遍历
+        p = p->next;		   //使指针p向前移动
         ++j;
     }
-    if(!(p->next) || i < 0)
+    if(!(p->next) || i < 0)    //!(p->next)意味着已经到达链表末尾但还未找到第i个位置。
     {
         cerr << "out of range" <<endl;
         return false;
     }
-    LNode *q = p->next;
-    p->next = p->next->next;
-    delete q;
+    LNode *q = p->next; //声明新指针q，指向当前p所指向节点的下一个节点(即将被删除的节点)。
+    p->next = p->next->next; 	//执行删除操作
+    delete q;				   //释放掉不再链表中的节点q所占用的内存，防止内存泄漏。
     return true; 
 }
 ```
 
 
 
+#### 两个有序列表的合并
 
+```cpp
+void MergeList(LinkList &La, LinkList &Lb, LinkList &Lc)
+{
+    Lnode *pa = La->next;    //声明指针pa，指向链表La的第一个实际数据结点
+    Lnode *pb = Lb->next;	 //声明指针pb，指向链表Lb的第一个实际数据结点
+    Lc = La;                 //先将La复制到新链表Lc中
+    Lnode *pc = Lc;          //声明指针pc，指向Lc链表
+    while (pa && pb)
+    {
+        if (pa->data <= pb->data) //尾插法，插入元素
+        {
+            //pc的指针域指向小元素的地址
+            pc->next = pa;
+            //移动pc指针，使得pc永远都指向最后链表Lc的最后一个元素
+            pc = pc->next;
+            //pa的元素使用过后，要向后移动pa
+            pa = pa->next;
+        }
+        else
+        {
+            //pc的指针域指向小元素的地址
+            pc->next = pb;
+            //移动pc指针，使得pc永远都指向最后链表Lc的最后一个元素
+            pc = pc->next;
+            //pb的元素使用过后，要向后移动pa
+            pb = pb->next;
+        }
+    }
+    //上面的while循环执行完毕后，较长的链表还会余留一段元素，这段元素的起始地址就是pa（或pb
+    pc->next = (pa ? pa : pb);
+    //链表合并完毕，释放Lb的头结点
+    delete Lb;
+}
+```
+
+#### 完整C++单链表案例
+
+```cpp
+#include <iostream>
+
+// 定义链表节点结构体
+struct Node {
+    int data;       // 存储节点的数据
+    Node* next;     // 指向下一个节点的指针
+};
+
+// 定义链表类
+class LinkedList {
+private:
+    Node* head;     // 头节点指针
+
+public:
+    // 构造函数，初始化链表为空
+    LinkedList() : head(nullptr) {}
+
+    // 在链表末尾插入新节点
+    void insert(int value) {
+        // 创建新节点
+        Node* newNode = new Node;
+        newNode->data = value;
+        newNode->next = nullptr;
+        
+        // 如果链表为空，将新节点作为头节点
+        if (head == nullptr) {
+            head = newNode;
+        } else {
+            // 找到链表末尾的节点
+            Node* current = head;
+            while (current->next != nullptr) {
+                current = current->next;
+            }
+            // 将新节点插入到末尾
+            current->next = newNode;
+        }
+    }
+
+    // 在指定位置插入新节点
+    void insertAt(int value, int position) {
+        // 创建新节点
+        Node* newNode = new Node;
+        newNode->data = value;
+        newNode->next = nullptr;
+
+        // 如果插入位置是头部
+        if (position == 0) {
+            newNode->next = head;
+            head = newNode;
+        } 
+        // 如果插入位置不是头部
+        else {
+            int count = 0;
+            Node* current = head;
+            Node* prev = nullptr;
+
+            // 找到插入位置的节点
+            while (current != nullptr && count < position) {
+                prev = current;
+                current = current->next;
+                count++;
+            }
+
+            // 在插入位置插入新节点
+            prev->next = newNode;
+            newNode->next = current;
+        }
+    }
+
+    // 删除指定节点
+    void remove(int value) {
+        // 如果链表为空，直接返回
+        if (head == nullptr) {
+            return;
+        }
+
+        // 如果要删除的节点是头节点
+        if (head->data == value) {
+            Node* temp = head;
+            head = head->next;
+            delete temp;
+            return;
+        }
+
+        // 查找要删除节点的前驱节点
+        Node* current = head;
+        Node* prev = nullptr;
+
+        while (current != nullptr && current->data != value) {
+            prev = current;
+            current = current->next;
+        }
+
+        // 如果找到要删除的节点
+        if (current != nullptr) {
+            prev->next = current->next;
+            delete current;
+        }
+    }
+
+    // 遍历链表并打印节点数据
+    void printList() {
+        Node* current = head;
+        while (current != nullptr) {
+            std::cout << current->data << " ";
+            current = current->next;
+        }
+        std::cout << std::endl;
+    }
+};
+
+int main() {
+    // 创建链表对象
+    LinkedList list;
+
+    // 在链表末尾插入节点
+    list.insert(1);
+    list.insert(2);
+    list.insert(3);
+
+    // 打印链表
+    std::cout << "链表: ";
+    list.printList();
+
+    // 在指定位置插入节点
+    list.insertAt(4, 2);
+
+    // 打印链表
+    std::cout << "链表: ";
+    list.printList();
+
+    // 删除节点
+    list.remove(2);
+
+    // 打印链表
+    std::cout << "链表: ";
+    list.printList();
+
+    return 0;
+}
+
+```
+
+
+
+## 循环链表
+
+[传送门：循环链表(单循环、双循环)](https://blog.csdn.net/AII_IIA/article/details/134215172)
+
+#### 循环单链表的定义
+
+```cpp
+typedef struct CLNode
+{
+    ElemType data; 
+    CLNode *next;
+}*CircList;
+```
+
+#### 循环单链表的初始化
+
+```cpp
+void InitList(CircList &L)
+{
+    L = new CLNode;   //在堆区创建一个初始结点
+    L->next = L;      //将该结点指向自身
+}
+```
+
+循环链表的基本操作和单链表基本上相同，唯一不同的是，由于循环链表的最后一个结点的next不再是空指针，而是指向头结点，因此，循环中的结束条件要发生变化。
+
+> ```
+> while(p->next)--->while(p->next!=L)
+> ```
+
+### 循环单链表
+
+单链表：
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/9b77848111c64c9594df905a7866dd59.png)
+
+循环单链表：
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/b0f5d86fd176493a855922c863282f16.png)
+
+- 循环单链表与普通单链表的主要区别在于，循环单链表的尾节点的指针不是指向 nullptr，而是指向头节点，形成一个闭环。这意味着，在循环单链表中，可以通过尾节点的指针重新回到头节点。
+
+循环单链表可以具有以下特点和优势：
+
+1. 尾节点的指针指向头节点，使得在遍历链表时不需要特别处理尾节点，方便实现循环遍历。
+2. 可以更容易地进行环形操作，如判断链表是否形成环、寻找环的起始点等。
+3. 循环单链表的插入和删除操作相对简单，因为不需要特别处理头部和尾部情况。
+4. 在使用循环单链表时，我们需要额外关注以下几点：
+5. 在插入和删除节点时，要确保更新指针的正确性，以避免死循环或链表中断。
+6. 在循环单链表中遍历时要设置终止条件，防止进入无限循环。
+
+#### 初始化一个循环单链表
+
+```cpp
+typedef struct LNode   		//定义单链表结合类型
+{
+	ElemType data;			//每个结点存放一个一个数据元素
+	LNode *next; 	//指针指向下一个结点
+}LNode, *LinkList;
+
+//初始化一个循环单链表
+bool InitList(LinkList &L)
+{
+	L =(LNode *) malloc(sizeof(LNode));	 //分配一个头结点
+    /*L = new LNode;*/   //与上一行作用等价
+	if(L == NULL)  		//内存不足、分配失败
+		return false;
+	L->next = L;		//头结点next指向头结点
+	return true;
+}
+```
+
+#### 判断单链表是否为空
+
+```cpp
+//判断循环单链表是否为空, 检查头结点指针是否指向它自己就行,如下图所示
+bool Empty(LinkList L)
+{
+    return (L->next == L)  //检查头结点指针是否指向它自己
+}
+```
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/918255adcfe647eeaef0aae2f29d8255.png)
+
+
+
+### 循环双链表
+
+循环双链表（Circular Doubly Linked List）是一种特殊类型的双向链表，其中最后一个节点的下一个指针指向头节点，头节点的前一个指针指向最后一个节点，形成一个循环。
+
+循环双链表与普通双链表的主要区别在于，循环双链表既具有双向链表的前驱和后继关系，也具有循环遍历的能力。
+
+双链表：表头结点的prior指向NULL; 表尾结点的next指向NULL。
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/2b0245850a8d42b9ae51f5bb202d7a05.png)
+
+循环双链表：表头结点的prior指向表尾结点； 表尾结点的next指向头结点。
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/1edef12eb32c4c1bbe94fcc2b29fa2bf.png)
+
+#### 循环双链表特点和优势
+
+1. 可以通过任意节点的前驱和后继指针方便地在双链表中进行插入和删除操作。
+2. 最后一个节点的下一个指针指向头节点，使得在遍历链表时不需要特别处理尾节点，可以很方便地实现循环遍历。
+3. 可以更容易地进行环形操作，如判断链表是否形成环、寻找环的起始点等。
+4. 循环双链表的插入和删除操作相对简单，不需要特别处理头部和尾部情况。
+
+#### 循环双链表的定义
+
+```cpp
+typedef struct DuLNode
+{
+    ElemType data;			//结点数据域
+    DuLNode *prior, *next;	//前驱结点、后驱结点
+} *DuLinkList;               
+```
+
+#### 循环双链表的初始化
+
+> 当我们在初始化一个双链表时，需要让头结点的前指针和后指 针都指向头结点自己（而普通的双链表指向NULL），如下图所示：
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/cb4d399eafc343a8ad1c6b9464fcaa04.png)
+
+```c
+//初始化空的循环双链表
+bool InitDLinkList(DlinkList &L)
+{
+	L = (DNode*) malloc(sizeof(DNode));	//分配一个头结点
+    /*L = new DuLNode;*/    //这两行作用相同
+	if(L ==　NULL)		  //内存不足，分配失败
+		return false;
+	L->prior = L;    //头结点的prior指向头结点
+	L->next = L;   	//头结点的next指向头结点
+	return true;	//初始化成功
+}
+```
+
+#### 判断循环双链表是否为空
+
+```c
+typedef struct DNode     //创建循环双链表
+{
+	ElemType data;
+	struct DNode *prior,*next;
+}DNode, *DLinkList;
+
+void testDLinkList()
+{
+	//初始化循环双链表
+	DLinkList L;
+	InitDLinkList(L);
+	//.......后续代码.......
+}
+//判断循环链表是否为空
+bool Empty(DLinkList L)
+{
+	return (L->next == L);
+}
+```
+
+#### 判断结点p是否为循环双链表的表尾结点
+
+```c
+bool isTail(DLinkList L, DNode  *p)
+{
+	return (p->next == L);
+}
+```
+
+### 双向链表
+
+#### 双向链表的定义
+
+```cpp
+//初始化双链表 
+typedef struct DuLNode		//定义双链表结点类型
+{
+	Elemtype data;			//数据域
+	DuLNode *prior, *next;  //前驱和后继指针
+}DuLNode, *DuLinkList;	
+```
+
+#### 双向链表初始化
+
+```cpp
+bool InitDuLinkList(DuLinkList &L)
+{
+	L=(DuLNode *) malloc(sizeof(DuLNode));//分配一个头结点
+    /*L = new DuLNode;*/ //等价于上一行 
+	if(L == NULL)		//内存不足，分配失败
+		return false;
+	L->prior = nullptr;	//头结点的prior永远指向NULL
+	L->next = nullptr;	//头结点之后暂时还没有结点
+	return true;	
+}
+```
+
+#### 判断双链表是否为空(带头结点)
+
+```cpp
+//判断双链表是否为空（带头结点）
+bool Empty(DuLinkList L) 
+{	
+	return (L->next == NULL);
+}
+```
+
+#### 头插法创建双向链表
+
+```cpp
+void CreatListHead(DuLinkList &L, const size_t)
+{
+    for(int i = 0; i < n; ++i)
+    {
+        DuLNode *p = new DuLNode;
+        cin >> p->data;
+        p->prior = L;
+        p->next = L->next;
+        L->next = p;
+    }
+}
+```
+
+#### 尾插法创建双向链表
+
+```cpp
+void CreatListTail(DuLinkList &L, const size_t n)
+{
+    DuLNode *r = L;
+    for(int i = 0; i < n; ++i)
+    {
+        DuLNode *p = new DuLNode;
+        cin >> p->data;
+        p->prior = r;
+        p->next = r->next;
+        r->next = p;
+        r = p;
+    }
+}
+```
+
+#### 在双向链表的第i个位置插入元素
+
+```cpp
+bool Insert_DuLinkList(DuLinkList &L, const int i, const ElemType &e)
+{
+    DuLNode *p = L->next;	//移动指针到 i 处
+    int j = 1;
+    while(p->next && j < i)
+    {
+        ++j;
+        p = p->next;
+    }
+    if(j < i || j < 1)
+    {
+        cerr << "out of range!"<< endl;
+        return false;
+    }
+    DuLNode *s = new DuLNode;	//在堆区创建一个结点
+    s->data = e;
+ 	/*建立链接关系*/
+    s->prior = p->prior; //s的前驱等于p的前驱
+    s->prior->next = s; //用p的前驱结点的next指向插入元素s
+    s->next = p;	//s的后继指向p
+    p->prior = s;	//p的前驱指向s
+    return true;
+}
+```
+
+ #### 删除双向链表中的某个元素
+
+```cpp
+bool ListErase_DuL(DuLinkList &L, const int i)
+{
+    //移动指针到i处
+    DuLnode *p = L->next;
+    int j = 1;
+    while (p->next && j < i)
+    {
+        ++j;
+        p = p->next;
+    }
+    if (j < i || j < 1) //如果i在链表范围内，上面的while循环的终止条件就是j<i
+    {
+        cerr << "out of range" << endl;
+        return false;
+    }
+    //改变链接关系
+    p->prior->next = p->next;//p的前趋结点的next等于p的后继
+    if ((p->next))//如果删除的不是最后一个元素
+    {
+        p->next->prior = p->prior;
+    }
+    //释放p
+    delete p;
+    //结束
+    return true;
+}
+```
+
+
+
+#### 双链表的插入
+
+[传送门：双链表详解(初始化、插入、删除、遍历)](https://blog.csdn.net/AII_IIA/article/details/134209802)
+
+> 在双链表中插入节点需要更新前驱节点和后继节点的指针连接，操作相对比较复杂。
+
+1. 首先，创建一个新节点，并设置它的数据值。
+2. 找到要插入位置的前驱节点。
+3. 将新节点的前驱指针指向前驱节点。
+4. 将新节点的后继指针指向前驱节点的后继节点。
+5. 更新前驱节点的后继指针指向新节点。
+6. 如果新节点的后继节点非空，将后继节点的前驱指针指向新节点。
+
+- 若结点在双链表插入数据元素e，且p结点有后继结点，如下图所示。
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/578c477c1c5b45cd89a2c2b3d8b93a71.png)
+
+```cpp
+//在p结点之后插入s结点
+bool InsertNextDuLNode(DuLNode *P, DNode *s)
+{
+	s->next = p->next;	//将结点*s插入到结点*p之后， 如上图步骤1
+	p->next->prior = s;  //如上图步骤2
+	s->prior = p;        //如上图步骤3
+	p->next = s;         //如上图步骤4
+}
+```
+
+- 如果p是最后一个结点，会发生什么？
+- p->next->prior = s; //如上图步骤2 这一行代码将出现问题 p->next指向的是NULL, 改进如下：
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/e9a730975c6541f0bd795b5cbc95a9a7.png)
+
+程序设计如下：注意修改指针时要注意顺序！！！
+
+```cpp
+//在p结点之后插入s结点
+bool InsertNextDuLNode(DuLNode *p, DuLNode *s)
+{
+	if (p == NULL || s == NULL) //非法参数
+		return false;
+	s->next = p->next;        //  (*)
+	if(p->next != NULL)
+	{
+		p->next->prior = s;  //如果p结点有后继结点，就回到了上一个情况
+	}
+	s->prior = p;	  //蓝色箭头操作
+	p->next = s;      //橙色箭头操作    (**)    
+	return true;  //插入成功
+}
+```
+
+指针顺序不能错！ 假如 (*) 与(**)行交换。 那么就会出现如下图情况，p指针next与s->next指向同一位置。
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/73500077373f41749fce348d830526fa.png)
+
+
+
+
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/a6f465b95f6245b0969f3be41976df88.png)
+
+#### 循环双链表的删除
+
+> 在双链表中删除节点的操作相对比较复杂，因为我们需要维护前驱节点和后继节点之间的指针连接。
+> 以下是删除双链表中某个节点的一般步骤：
+
+1. 首先，找到要删除的节点。
+2. 如果要删除的节点是头节点，将头节点指针指向下一个节点，并更新下一个节点的前驱指针为 nullptr。
+3. 如果要删除的节点是尾节点，将前一个节点的后继指针设为 nullptr，并更新尾节点指针为前一个节点。
+4. 如果要删除的节点既不是头节点也不是尾节点，将前一个节点的后继指针指向要删除节点的后一个节点，将后一个节点的前驱指针指向要删除节点的前一个节点。
+5. 释放要删除的节点的内存空间。
+
+```cpp
+//删除p的后继结点q, 如下图所示
+p->next = q->next;
+q->next->prior = p; //如果p没有后继结点，普通循环链表会出问
+free(q);
+```
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/175f55740f434b7abe7192e82cf64cbe.png)
+
+------
+
+> 在实际使用中，应该确保要删除的节点在链表中确实存在。如果删除的节点不存在于链表中，需要根据具体的需求进行错误处理。同时，删除节点后必须确保释放相应的内存空间，以防止内存泄漏问题的发生。
+
+> 删除q结点
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/eb81bf34699f4a4fba033de795d9ec32.png)
+
+> 将 p 结点的next指针，指向q结点的后继结点。
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/7bee37f9dbd04639bd70fddfc5ef0455.png)
+
+> 释放 q 结点空间
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/23de235ccb8f4cf48bee6d2a5aab3b3f.png)
+
+#### 删除p结点的后继结点
+
+```c
+//删除p结点的后继结点
+bool DeleteNextDuLNode(DuLNode *p)
+{
+	if(p==NULL)		
+		return false;
+	DuLNode *q = p->next;			//找到p的后继结点
+	if(q==NULL)
+		return false;		//p没有后继结点
+	p->next = q->next;
+	if(q->next != NULL)		//q结点不是最后一个结点
+		q->next->prior = p;	
+	free(q);		//释放结点空间
+	return true;	//删除成功	
+}
+```
+
+#### 销毁一个双链表
+
+```c
+//销毁一个双链表
+void DestoryList(DuLinkList &L)
+{
+	//循环释放各个数据结点
+	while(L->next != NULL)    //判断头结点是否有后继结点，直到头结点后再无其他结点结束循环
+	{
+		DeleteNextDuLNode(L);    //删除p结点的后继结点
+	}
+	free(L);	//释放头结点
+	L = NULL;		//头指针指向NULL	
+}
+```
+
+```cpp
+//删除p的后继结点q
+p->next = q->next;
+q->next->prior = p;  //如果p没有后继结点，普通循环链表会出问题
+free(q);
+```
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/301a1c869401465b84534beddb91700c.png)
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/f35eccd67ab3403794686243dc65ddf7.png)
 
 
 
