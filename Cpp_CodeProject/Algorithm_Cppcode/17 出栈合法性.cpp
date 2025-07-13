@@ -3,7 +3,7 @@
 #include <stack>
 #include <queue>
 using namespace std;
-int main()
+int main17()
 {
 	int n = 1;
 	while (cin >> n && 1 <= n && n <= 100)
@@ -34,5 +34,6 @@ int main()
 			cout << "Yes" << endl;
 		}
 	}
+	return 0;
 }
 #endif
