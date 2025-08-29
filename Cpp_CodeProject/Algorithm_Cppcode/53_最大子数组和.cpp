@@ -1,5 +1,8 @@
 #include <iostream>
+<<<<<<< HEAD
 #include <string>
+=======
+>>>>>>> 0b15ce38f0ad5a9d8cdbd6bd2502d8e874b99186
 #include <vector>
 using namespace std;
 
